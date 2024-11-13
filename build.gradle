@@ -17,11 +17,40 @@ repositories {
 	mavenCentral()
 }
 
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+bootRun {
+	systemProperty 'spring.profiles.active', 'testdata'
+}
+
+ext {
+	set('springCloudVersion', "2023.0.3")
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	//스프링 클라우드 컨피그 의존성
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	//설정 서버 연결 재시도 라이브러리
+	implementation 'org.springframework.retry:spring-retry'
+	//새로고침 이벤트
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }
 
 tasks.named('test') {
