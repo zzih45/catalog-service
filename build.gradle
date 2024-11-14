@@ -30,6 +30,7 @@ bootRun {
 
 ext {
 	set('springCloudVersion', "2023.0.3")
+	set('testcontainersVersion', "1.17.3")
 }
 
 dependencies {
@@ -41,15 +42,24 @@ dependencies {
 	implementation 'org.springframework.retry:spring-retry'
 	//새로고침 이벤트
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	//스프링 데이터 JDBC 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	runtimeOnly 'org.postgresql:postgresql'
+	//플라이웨어 사용
+	implementation 'org.flywaydb:flyway-core'
+	implementation 'org.flywaydb:flyway-database-postgresql'
 
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//테스트 컨테이너 의존성 추가
+	testImplementation 'org.testcontainers:postgresql'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
 	}
 }
 
